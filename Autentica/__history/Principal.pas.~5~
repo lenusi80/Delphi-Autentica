@@ -1,0 +1,396 @@
+unit Principal;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, M_Text_Arq, DB, ADODB, Mask, DBCtrls, ExtCtrls, ComCtrls,
+  Menus, WinSkinData;
+
+type
+  TFrmPrincipal = class(TForm)
+    Matric_Text_Arq1: TMatric_Text_Arq;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    DB: TADOConnection;
+    Tb_Registros: TADOTable;
+    Qr_Registros: TADOQuery;
+    DsRegistros: TDataSource;
+    DsQrRegistros: TDataSource;
+    Tb_RegistrosCodigo: TAutoIncField;
+    Tb_RegistrosValor: TBCDField;
+    Label1: TLabel;
+    DBEdit1: TDBEdit;
+    Label2: TLabel;
+    Label3: TLabel;
+    DBEdit3: TDBEdit;
+    StatusBar1: TStatusBar;
+    Timer1: TTimer;
+    Button4: TButton;
+    MainMenu1: TMainMenu;
+    Relatrio1: TMenuItem;
+    Sobre1: TMenuItem;
+    Qr_RegistrosCodigo: TAutoIncField;
+    Qr_RegistrosValor: TBCDField;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    SkinData1: TSkinData;
+    Label8: TLabel;
+    Button5: TButton;
+    RadioGroup1: TRadioGroup;
+    Tb_RegistrosEspecie: TWideStringField;
+    Qr_RegistrosEspecie: TWideStringField;
+    Label9: TLabel;
+    DBEdit4: TDBEdit;
+    Label10: TLabel;
+    Label11: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    CheckBox1: TCheckBox;
+    Tb_RegistrosData: TDateTimeField;
+    Qr_RegistrosData: TDateTimeField;
+    procedure Button1Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Timer1Timer(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure Sobre1Click(Sender: TObject);
+    procedure Relatrio1Click(Sender: TObject);
+    procedure RadioGroup1Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure CheckBox1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmPrincipal: TFrmPrincipal;
+  TotalGeral : Real;
+
+implementation
+
+uses ABOUT, Consulta;
+
+{$R *.dfm}
+
+procedure TFrmPrincipal.Button1Click(Sender: TObject);
+var
+ mensagem, especie : string;
+begin
+ if Tb_Registros.State in[dsInsert] then  // 01
+ begin
+  if DBEdit3.Text <> '' then  // 02
+  begin
+   case RadioGroup1.ItemIndex of
+    0 : begin
+      especie := 'RC';
+      Tb_RegistrosData.Value := strtodate(FormatDateTime('dd/mm/yyyy',DateTimePicker1.date));
+      Tb_RegistrosEspecie.Value := especie;
+       Tb_Registros.Post;
+       mensagem := DBEdit1.text + ' ' +	 DateToStr(Tb_RegistrosData.value) + ' ' +  TimeToStr(time) + '  ' + CurrToStrF(Tb_RegistrosValor.Value,ffCurrency,2) + '  ' + especie;
+     with Matric_Text_Arq1 do
+     begin
+     showmessage ('Coloque o lado da Primeira Autenticação');
+     IniciarImpressao;
+     TextoC(1,1,mensagem);
+     TextoPulaLinha;
+     FinalizaImpressao;
+     showmessage ('Coloque o lado da Segunda Autenticação');
+     IniciarImpressao;
+     TextoC(1,1,mensagem);
+     TextoPulaLinha;
+     FinalizaImpressao;
+      if CheckBox1.Checked then
+       begin
+        showmessage ('Será impresso na Fita Agora');
+        IniciarImpressao;
+        TextoC(1,1,mensagem);
+        TextoPulaLinha;
+        FinalizaImpressao;
+       end;
+     end;   //with
+    end;  //case :0
+    1 : Begin
+      especie := 'PG';
+      Tb_RegistrosData.Value := strtodate(FormatDateTime('dd/mm/yyyy',DateTimePicker1.date));
+      Tb_RegistrosEspecie.Value := especie;
+       Tb_Registros.Post;
+       mensagem := DBEdit1.text + ' ' +	 DateToStr(Tb_RegistrosData.value) + ' ' +  TimeToStr(time) + '  ' + CurrToStrF(Tb_RegistrosValor.Value,ffCurrency,2) + '  ' + especie;
+     with Matric_Text_Arq1 do
+     begin
+     showmessage ('Insira a Nota para Autenticação');
+     IniciarImpressao;
+     TextoC(1,1,mensagem);
+     TextoPulaLinha;
+     FinalizaImpressao;
+      if CheckBox1.Checked then
+       begin
+        showmessage ('Será impresso na Fita Agora');
+        IniciarImpressao;
+        TextoC(1,1,mensagem);
+        TextoPulaLinha;
+        FinalizaImpressao;
+       end;
+     end;   //with
+    end;  //case :1
+    2 : Begin
+      especie := 'TOT';
+      Tb_RegistrosData.Value := strtodate(FormatDateTime('dd/mm/yyyy',DateTimePicker1.date));
+      Tb_RegistrosEspecie.Value := especie;
+       Tb_Registros.Post;
+       mensagem := DBEdit1.text + ' ' +	 DateToStr(Tb_RegistrosData.value) + ' ' +  TimeToStr(time) + '  ' + CurrToStrF(Tb_RegistrosValor.Value,ffCurrency,2) + '  ' + especie;
+     with Matric_Text_Arq1 do
+     begin
+     showmessage ('Insira o envelope para Autenticação');
+     IniciarImpressao;
+     TextoC(1,1,mensagem);
+     TextoPulaLinha;
+     FinalizaImpressao;
+      if CheckBox1.Checked then
+       begin
+        showmessage ('Será impresso na Fita Agora');
+        IniciarImpressao;
+        TextoC(1,1,mensagem);
+        TextoPulaLinha;
+        FinalizaImpressao;
+       end;
+     end;   //with
+    end;  //case :2
+   end; // Case
+
+   TotalGeral := TotalGeral + Tb_RegistrosValor.Value;
+   Label8.Caption := Format('R$ %4.2f',[TotalGeral]); 
+
+
+  end   // if 02
+  else
+   ShowMessage('Faltando Informações');
+ end  //if 01
+ else
+  ShowMessage('Este não é um registro novo!');
+end;
+
+
+procedure TFrmPrincipal.Button2Click(Sender: TObject);
+begin
+if Tb_Registros.State in [dsinsert] then
+else
+begin
+ Tb_Registros.Insert;
+ DBEdit3.SetFocus;
+end;
+end;
+
+procedure TFrmPrincipal.Button3Click(Sender: TObject);
+begin
+FrmPrincipal.Close;
+end;
+
+procedure TFrmPrincipal.Button4Click(Sender: TObject);
+var
+ mensagem : string;
+begin
+ if Tb_Registros.State in[dsInsert] then    // 01
+ else
+ begin
+  if DBEdit3.Text <> '' then   // 02
+  begin
+   case RadioGroup1.ItemIndex of
+    0 : begin
+      mensagem := DBEdit1.text + ' ' +	 DateToStr(Tb_RegistrosData.value) + ' ' +  TimeToStr(time) + '  ' + CurrToStrF(Tb_RegistrosValor.Value,ffCurrency,2) + '  ' + Tb_RegistrosEspecie.Value;
+     with Matric_Text_Arq1 do
+     begin
+     showmessage ('Coloque o lado da Primeira Autenticação');
+     IniciarImpressao;
+     TextoC(1,1,mensagem);
+     TextoPulaLinha;
+     FinalizaImpressao;
+     showmessage ('Coloque o lado da Segunda Autenticação');
+     IniciarImpressao;
+     TextoC(1,1,mensagem);
+     TextoPulaLinha;
+     FinalizaImpressao;
+      if CheckBox1.Checked then
+       begin
+         showmessage ('Será impresso na Fita Agora');
+         IniciarImpressao;
+         TextoC(1,1,mensagem);
+         TextoPulaLinha;
+         FinalizaImpressao;
+       end;
+     end;   //with
+    end;  //case :0
+    1 : Begin
+      mensagem := DBEdit1.text + ' ' +	DateToStr(Tb_RegistrosData.value) + ' ' +  TimeToStr(time) + '  ' + CurrToStrF(Tb_RegistrosValor.Value,ffCurrency,2) + '  ' + Tb_RegistrosEspecie.Value;
+     with Matric_Text_Arq1 do
+     begin
+     showmessage ('Insira a Nota para Autenticação');
+     IniciarImpressao;
+     TextoC(1,1,mensagem);
+     TextoPulaLinha;
+     FinalizaImpressao;
+      if CheckBox1.Checked then
+       begin
+        showmessage ('Será impresso na Fita Agora');
+        IniciarImpressao;
+        TextoC(1,1,mensagem);
+        TextoPulaLinha;
+        FinalizaImpressao;
+       end;
+     end;   //with
+    end;  //case :1
+    2 : Begin
+      mensagem := DBEdit1.text + ' ' +	DateToStr(Tb_RegistrosData.value) + ' ' +  TimeToStr(time) + '  ' + CurrToStrF(Tb_RegistrosValor.Value,ffCurrency,2) + '  ' + Tb_RegistrosEspecie.Value;
+     with Matric_Text_Arq1 do
+     begin
+     showmessage ('Insira o envelope para Autenticação');
+     IniciarImpressao;
+     TextoC(1,1,mensagem);
+     TextoPulaLinha;
+     FinalizaImpressao;
+      if CheckBox1.Checked then
+       begin
+        showmessage ('Será impresso na Fita Agora');
+        IniciarImpressao;
+        TextoC(1,1,mensagem);
+        TextoPulaLinha;
+        FinalizaImpressao;
+       end;
+     end;   //with
+    end;  //case :2
+   end; // Case
+  end   // if 02
+  else
+   ShowMessage('Faltando Informações');
+ end;
+end;
+
+procedure TFrmPrincipal.Button5Click(Sender: TObject);
+var
+ mensagem : string;
+begin
+if TotalGeral <> 0 then
+if MessageDlg('Deseja imprimir soma total?',mtConfirmation,[mbYes,mbCancel],0) = mryes then
+ begin
+  mensagem := 'Valor Total _____________' + Label8.Caption;
+  Matric_Text_Arq1.IniciarImpressao;
+  Matric_Text_Arq1.TextoC(1,1, mensagem);
+  Matric_Text_Arq1.TextoPulaLinha;
+  Matric_Text_Arq1.TextoPulaLinha_Traco('.',50);
+  Matric_Text_Arq1.FinalizaImpressao;
+  TotalGeral := 0;
+  Label8.Caption := '             0,00';
+ end;
+end;
+
+procedure TFrmPrincipal.CheckBox1Click(Sender: TObject);
+begin
+case CheckBox1.Checked of
+true : Button5.Enabled := true;
+False : Button5.Enabled := false;
+end;
+end;
+
+procedure TFrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  if (TotalGeral <> 0) and (CheckBox1.Checked) then
+   begin
+     ShowMessage('Não pode fechar este programa enquanto existir saldo para imprimir');
+     abort;
+   end;
+
+end;
+
+procedure TFrmPrincipal.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if key = vk_f1 then
+ Button2.Click;
+
+if key = vk_f2 then
+ Button1.Click;
+
+if Key = vk_escape then
+begin
+ Tb_Registros.Cancel;
+ Button2.SetFocus;
+end;
+
+
+end;
+
+procedure TFrmPrincipal.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+if Key = #13 then
+begin
+      Key := #0;
+      PostMessage(Handle, WM_NEXTDLGCTL, 0, 0);
+end;
+end;
+
+procedure TFrmPrincipal.FormShow(Sender: TObject);
+begin
+DateTimePicker1.Date := strtodate(InputBox('Programa Autentica','Data de Trabalho', dateToStr(date)));
+Tb_Registros.Last;
+end;
+
+procedure TFrmPrincipal.RadioGroup1Click(Sender: TObject);
+var
+ mensagem : string;
+begin
+case RadioGroup1.ItemIndex of
+ 0 : Label8.Color := clGreen;
+ 1 : Label8.Color := clRed;
+ 2 : Label8.Color := clBlue;
+end;
+ if (TotalGeral <> 0) and (CheckBox1.Checked) then
+  begin
+   if MessageDlg('Há valor Total de Lançamentos. Quer que seja Impresso na fita', mtConfirmation,[mbYes,mbCancel],0) = mryes then
+    begin
+    mensagem := 'Valor Total _____________' + Label8.Caption;
+    Matric_Text_Arq1.IniciarImpressao;
+    Matric_Text_Arq1.TextoC(1,1, mensagem);
+    Matric_Text_Arq1.TextoPulaLinha;
+    Matric_Text_Arq1.TextoPulaLinha_Traco('.',50);
+    Matric_Text_Arq1.FinalizaImpressao;
+    TotalGeral := 0;
+    Label8.Caption := '             0,00';
+    end;
+  end
+  else
+   begin
+    TotalGeral := 0;
+    Label8.Caption := '             0,00';
+   end;
+
+end;
+
+procedure TFrmPrincipal.Relatrio1Click(Sender: TObject);
+begin
+Frm_Consulta.ShowModal;
+end;
+
+procedure TFrmPrincipal.Sobre1Click(Sender: TObject);
+begin
+aboutbox.show;
+end;
+
+procedure TFrmPrincipal.Timer1Timer(Sender: TObject);
+var
+   hora, data : string;
+begin
+data := DateToStr(date);
+hora :=  timetostr(time);
+StatusBar1.Panels[0].Text := data + '      ' + hora + '   ';
+//StatusBar1.Refresh;
+end;
+
+end.

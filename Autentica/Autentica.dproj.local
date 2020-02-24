@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2009/07/24 18:58:44.125.pas,C:\Documents and Settings\Administrador\Meus documentos\RAD Studio\Projects\Unit1.pas=C:\Autentica\Autentica.pas</Transaction>
+    <Transaction>2009/07/24 18:58:44.125.dfm,C:\Documents and Settings\Administrador\Meus documentos\RAD Studio\Projects\Unit1.dfm=C:\Autentica\Autentica.dfm</Transaction>
+    <Transaction>2009/07/24 18:59:12.953.pas,C:\Autentica\Autentica.pas=C:\Autentica\Principal.pas</Transaction>
+    <Transaction>2009/07/24 18:59:12.953.dfm,C:\Autentica\Autentica.dfm=C:\Autentica\Principal.dfm</Transaction>
+    <Transaction>2009/07/24 18:59:40.000.dproj,C:\Documents and Settings\Administrador\Meus documentos\RAD Studio\Projects\Project2.dproj=C:\Autentica\Autentica.dproj</Transaction>
+    <Transaction>2009/07/24 21:03:03.421.pas,C:\Autentica\Unit1.pas=C:\Autentica\Consulta.pas</Transaction>
+    <Transaction>2009/07/24 21:03:03.421.dfm,C:\Autentica\Unit1.dfm=C:\Autentica\Consulta.dfm</Transaction>
+  </Transactions>
+</BorlandProject>

@@ -1,0 +1,17 @@
+program Autentica;
+
+uses
+  Forms,
+  Principal in 'Principal.pas' {FrmPrincipal},
+  ABOUT in 'ABOUT.pas' {AboutBox},
+  Consulta in 'Consulta.pas' {Frm_Consulta};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.CreateForm(TFrmPrincipal, FrmPrincipal);
+  Application.CreateForm(TAboutBox, AboutBox);
+  Application.CreateForm(TFrm_Consulta, Frm_Consulta);
+  Application.Run;
+end.
